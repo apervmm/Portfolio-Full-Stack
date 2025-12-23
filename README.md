@@ -18,4 +18,4 @@ python manage.py runserver
 
 
 ### Production:
-https://apervm.vercel.app/
+https://almasperneshev.com/
