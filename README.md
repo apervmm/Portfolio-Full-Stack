@@ -1,11 +1,12 @@
-# Full Stack Resume Application
+# A Server-Side Rendering Full-Stack Resume Application
+
 
 ### Activate a virtual environment:
 python -m venv .venv
 
 Windows: .venv\Scripts\activate
 
-MacOS: source .venv/bin/activate
+macOS/Linux: source .venv/bin/activate
 
 pip install -r requirements.txt
 
