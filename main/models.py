@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.core.exceptions import ValidationError
 from ckeditor.fields import RichTextField
+from urllib.parse import urlparse
+
 
 
 class Skill(models.Model):
@@ -112,6 +115,14 @@ class Portfolio(models.Model):
     slug = models.SlugField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
+    observable_url = models.URLField(blank=True, null=True, help_text="e.g. https://observablehq.com/@477/domestic-destinations")
+    observable_cells = models.CharField(max_length=300, blank=True, null=True, help_text="Comma-separated cell names. Leave blank to embed the whole notebook.")
+    observable_height = models.PositiveIntegerField(default=600)
+
+    def clean(self):
+        if self.observable_url and urlparse(self.observable_url).netloc != "observablehq.com":
+            raise ValidationError({"observable_url": "Must be an observablehq.com URL."})
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = slugify(self.name)
@@ -122,6 +133,18 @@ class Portfolio(models.Model):
 
     def get_absolute_url(self):
         return f"/portfolio/{self.slug}"
+    
+
+    @property
+    def observable_embed_url(self):
+        if not self.observable_url:
+            return None
+        path = urlparse(self.observable_url).path.removeprefix("/embed")
+        url = f"https://observablehq.com/embed{path}"
+        if self.observable_cells:
+            cells = ",".join(c.strip() for c in self.observable_cells.split(",") if c.strip())
+            url += f"?cells={cells}"
+        return url
 
 
 class Blog(models.Model):
