@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.core.exceptions import ValidationError
 from ckeditor.fields import RichTextField
+from urllib.parse import urlparse
+
 
 
 class Skill(models.Model):
@@ -111,6 +114,14 @@ class Portfolio(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to="portfolio")
     slug = models.SlugField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
+
+    observable_url = models.URLField(blank=True, null=True, help_text="e.g. https://observablehq.com/@477/domestic-destinations")
+    observable_cells = models.CharField(max_length=300, blank=True, null=True, help_text="Comma-separated cell names. Leave blank to embed the whole notebook.")
+    observable_height = models.PositiveIntegerField(default=600)
+
+    def clean(self):
+        if self.observable_url and urlparse(self.observable_url).netloc != "observablehq.com":
+            raise ValidationError({"observable_url": "Must be an observablehq.com URL."})
 
     def save(self, *args, **kwargs):
         if not self.id:
