@@ -59,9 +59,10 @@ Start Content
   <div class="sectionSpaceSm">
     <div class="container">
       <div class="observableEmbed" style="--embed-h: {{ object.observable_height }}px">
-        <iframe src="{{ object.observable_embed_url }}"
-                title="{{ object.name }} interactive visualization"
-                loading="lazy"></iframe>
+        <iframe 
+          src="{{ object.observable_embed_url }}"
+          title="{{ object.name }} interactive visualization"
+          loading="lazy"></iframe>
       </div>
       <a href="{{ object.observable_url }}" target="_blank" rel="noopener" class="simpleLink">
         Open notebook on Observable ↗
