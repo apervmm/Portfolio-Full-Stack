@@ -133,6 +133,18 @@ class Portfolio(models.Model):
 
     def get_absolute_url(self):
         return f"/portfolio/{self.slug}"
+    
+
+    @property
+    def observable_embed_url(self):
+        if not self.observable_url:
+            return None
+        path = urlparse(self.observable_url).path.removeprefix("/embed")
+        url = f"https://observablehq.com/embed{path}"
+        if self.observable_cells:
+            cells = ",".join(c.strip() for c in self.observable_cells.split(",") if c.strip())
+            url += f"?cells={cells}"
+        return url
 
 
 class Blog(models.Model):
