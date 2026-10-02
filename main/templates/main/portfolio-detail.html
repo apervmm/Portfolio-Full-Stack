@@ -54,9 +54,22 @@ Start Content
   </div>
 </section>
 
+{% if object.observable_embed_url %}
 <section>
-
+  <div class="sectionSpaceSm">
+    <div class="container">
+      <div class="observableEmbed" style="--embed-h: {{ object.observable_height }}px">
+        <iframe src="{{ object.observable_embed_url }}"
+                title="{{ object.name }} interactive visualization"
+                loading="lazy"></iframe>
+      </div>
+      <a href="{{ object.observable_url }}" target="_blank" rel="noopener" class="simpleLink">
+        Open notebook on Observable ↗
+      </a>
+    </div>
+  </div>
 </section>
+{% endif %}
 
 <section>
   <div class="sectionSpaceSm">
